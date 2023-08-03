@@ -60,7 +60,23 @@ exports.findOne = function (att, whereOption, groupBy, inclu, limit, offset, ord
     });
 }
 
-exports.deleteOne = function (id, model) {
+exports.deleteBook = function (id, model) {
+    return new Promise(function (resolve, reject) {
+        model.destroy({
+            where: {
+                author: id
+            }
+        }).then(function (result) {
+            return resolve(result)
+        }).catch(function (error) {
+            return reject({
+                error: error.original,
+                code: 420
+            });
+        });
+    });
+}
+exports.deleteData = function (id, model) {
     return new Promise(function (resolve, reject) {
         model.destroy({
             where: {
@@ -76,6 +92,7 @@ exports.deleteOne = function (id, model) {
         });
     });
 }
+
 
 
 

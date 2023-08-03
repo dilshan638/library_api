@@ -1,4 +1,5 @@
 var autherModel = require('../../models/auther');
+var bookModel = require('../../models/book');
 var helpers = require('../helpers/common_functions');
 var  moment = require('moment');
 const dotenv = require('dotenv');
@@ -51,5 +52,37 @@ module.exports = {
              res.status(500).send({message:error})
          } 
      },
+     updateAuthor : async function(req,res){ 
+        try{
+            if(!req.params.id || !req.body.first_name || !req.body.last_name){
+                return res.status(400).json({
+                    error: "bad request",
+                });
+            }
+            let update = await autherModel.update({ first_name:req.body.first_name, last_name: req.body.last_name }, { where: { id: req.params.id } });
+            return res.status(200).json({status:"Auther Updated"})
+         
+        }catch (error) {
+             console.log(error)
+             res.status(500).send({message:error})
+         } 
+     },
+     deleteAuthor : async function(req,res){ 
+        try{
+            if(!req.params.id ){
+                return res.status(400).json({
+                      error: "Missing Required ID",
+              })
+            }
+            let delete_author =await helpers.deleteData(req.params.id, autherModel);
+            let delete_book =await helpers.deleteBook(req.params.id, bookModel); 
+          return res.status(200).json({status:"Author Deleted"})
+         
+        }catch (error) {
+             console.log(error)
+             res.status(500).send({message:error})
+         } 
+     },
+     
      
 }
